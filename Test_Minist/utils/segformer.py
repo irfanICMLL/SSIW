@@ -11,14 +11,14 @@ from mmcv.cnn import ConvModule, DepthwiseSeparableConvModule
 
 import math
 #from .decode_heads.decode_head import BaseDecodeHead
-from mseg_semantic.model.decode_heads.aspp_head import ASPPHead, ASPPModule
+from utils.decode_heads.aspp_head import ASPPHead, ASPPModule
 from mmcv.cnn.bricks import build_norm_layer
 from mmseg.ops import resize
 
 # pip install timm==0.3.2
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 import logging
-from mseg_semantic.model.decode_heads.segformer_head import SegFormerHead
+from utils.decode_heads.segformer_head import SegFormerHead
 logger = logging.getLogger(__name__)
 
 class FCNHead(nn.Module):
