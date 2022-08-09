@@ -211,7 +211,7 @@ def do_test(args, local_rank):
   
 def test_single(args, imgs_list, local_rank, model, gt_embs_list):
     for i, rgb_path in tqdm(enumerate(imgs_list)):
-        save_path = os.path.join(args.root_dir, args.save_folder, f'{args.img_folder}{args.cam_id}', os.path.basename(rgb_path))
+        save_path = os.path.join(args.root_dir, args.save_folder, os.path.basename(rgb_path))
         save_path = os.path.splitext(save_path)[0] + '.png'
         
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
