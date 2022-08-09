@@ -171,8 +171,8 @@ def do_test(args, local_rank):
     model.eval()
 
     if args.distributed:
-        model = torch.nn.parallel.DistributedDataParallel(model.cuda()，
-                                                          device_ids=[local_rank,]
+        model = torch.nn.parallel.DistributedDataParallel(model.cuda(),
+                                                          device_ids=[local_rank,],
                                                           output_device=local_rank,
                                                           find_unused_parameters=True)
     else:
