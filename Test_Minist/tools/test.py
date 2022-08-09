@@ -109,8 +109,8 @@ def single_scale_single_crop_cuda(model,
                       args=None) -> np.ndarray:
     ori_h, ori_w, _ = image.shape
     mean, std = get_imagenet_mean_std()
-    crop_h = (np.ceil((ori_h - 1) / 32) * 32).astype(np.int)
-    crop_w = (np.ceil((ori_w - 1) / 32) * 32).astype(np.int)
+    crop_h = (np.ceil((ori_h - 1) / 32) * 32).astype(np.int32)
+    crop_w = (np.ceil((ori_w - 1) / 32) * 32).astype(np.int32)
     
     image, pad_h_half, pad_w_half = pad_to_crop_sz(image, crop_h, crop_w, mean)
     image_crop = torch.from_numpy(image.transpose((2, 0, 1))).float()
