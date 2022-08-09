@@ -58,7 +58,7 @@ def get_parser() -> CfgNode:
     return cfg
 
   
-  def get_prediction(embs, gt_embs_list):
+def get_prediction(embs, gt_embs_list):
     prediction = []
     logits = []
     B, _, _, _ = embs.shape
@@ -227,7 +227,7 @@ def visual_segments(segments, rgb):
     vis_seg = Image.blend(rgb1, seg1, 0.8)
     return vis_seg
   
- def organize_images(args, local_rank):
+def organize_images(args, local_rank):
     imgs_dir = os.path.join(args.root_dir, f'{args.img_folder}{args.cam_id}')
     imgs_list = glob.glob(imgs_dir + f'/*.{args.img_file_type}')
     imgs_list.sort()
