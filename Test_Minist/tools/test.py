@@ -228,4 +228,48 @@ def visual_segments(segments, rgb):
     return vis_seg
   
  def organize_images(args, local_rank):
+    imgs_dir = os.path.join(args.root_dir, f'{args.img_folder}{args.cam_id}')
+    imgs_list = glob.glob(imgs_dir + f'/*.{args.img_file_type}')
+    imgs_list.sort()
+    num_devices = args.gpus_num
+
+    imgs_on_device = imgs_list[local_rank::num_devices]
+    return imgs_on_device
+
+def main_worker(local_rank: int, cfg: dict):
+    if cfg.distributed:
+        global_rank = loca_rank
+        world_size = cfg.gpus_num
+        
+        torch.cuda.set_device(global_rank)
+        dist.init_process_group(backend="nccl",
+                            init_method=cfg.dist_url,
+                            world_size=world_size,
+                            rank=global_rank,)
+    do_test(cfg, local_rank)
+if __name__ == '__main__':
+    args = get_parser()
+    logger.info(args)
     
+    dis_url = 'tcp://127.0.0.1:6769'
+    dist_url = dist_url[:-2] + str(os.getpid() % 100).zfill(2)
+    args.dist_url = dist_url
+    
+    num_gpus = torch.cuda.device_count()
+    if num_gpus != args.gpus_num:
+        raise RuntimeError('The set gpus number cannot match the detected gpus number. Please check or set CUDA_VISIBLE_DEVICES')
+    
+    if num_gpus > 1:
+        args.distributed = True
+    else:
+        args.distributed = False
+    
+    save_path = os.path.join(args.root_dir, args.save_folder, 'id2labels.json')
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    with open(save_path, 'w') as f:
+        json.dump(UNI_UID2UNAME, f)
+    
+    if not args.distributed:
+        main_worker(0, args)
+    else:
+        mp.spawn(main_worker, nprocs=args.gpus_num, args=(args, ))
