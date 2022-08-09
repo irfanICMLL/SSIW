@@ -247,7 +247,7 @@ def visual_segments(segments, rgb):
     return vis_seg
   
 def organize_images(args, local_rank):
-    imgs_dir = os.path.join(args.root_dir, f'{args.img_folder}{args.cam_id}')
+    imgs_dir = args.root_dir
     imgs_list = glob.glob(imgs_dir + f'/*.{args.img_file_type}')
     imgs_list.sort()
     num_devices = args.gpus_num
