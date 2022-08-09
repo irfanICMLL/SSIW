@@ -119,7 +119,7 @@ def single_scale_single_crop_cuda(model,
     with torch.no_grad():
         emb, _, _ = model(inputs=image_crop, label_space=['universal'])
         logit = get_prediction(emb, gt_embs_list)
-    logit_universal = F.softmax(logit * 100).squeeze()
+    logit_universal = F.softmax(logit * 100, dim=1).squeeze()
 
     # disregard predictions from padded portion of image
     prediction_crop = logit_universal[:, pad_h_half:pad_h_half + ori_h, pad_w_half:pad_w_half + ori_w]
@@ -168,7 +168,7 @@ def single_scale_cuda(model,
             with torch.no_grad():
                 emb, _, _ = model(inputs=image_crop, label_space=['universal'])
                 logit = get_prediction(emb, gt_embs_list)
-            logit_universal = F.softmax(logit * 100)
+            logit_universal = F.softmax(logit * 100, dim=1)
             prediction_crop[:, s_h:e_h, s_w:e_w] += logit_universal.squeeze()
 
     prediction_crop /= count_crop.unsqueeze(0)
