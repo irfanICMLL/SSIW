@@ -43,19 +43,37 @@ def get_parser() -> CfgNode:
     """
     TODO: add to library to avoid replication.
     """
-    parser = argparse.ArgumentParser(description='PyTorch Semantic Segmentation')
-    parser.add_argument('--config', type=str, default='../config/test/test_720_ss.yaml', help='config file')
-    parser.add_argument('--file_save', type=str, default='default', help='eval result to save, when lightweight option is on')
-    parser.add_argument('--img_dir', type=str, default='../../test_any/all', help='dir for testing images')
+    parser = argparse.ArgumentParser(description='Yvan Yin\'s Semantic Segmentation Model.')
+    parser.add_argument('--root_dir', type=str, help='root dir for the data')
+    parser.add_argument('--cam_id', type=str, help='camera ID')
+    parser.add_argument('--img_folder', default='image_', type=str, help='the images folder name except the camera ID')
+    parser.add_argument('--img_file_type', default='jpeg', type=str, help='the file type of images, such as jpeg, png, jpg...')
+
+    parser.add_argument('--config', type=str, default='720_ss', help='config file')
+    parser.add_argument('--gpus_num', type=int, default=2, help='number of gpus')
+    parser.add_argument('--save_folder', type=str, default='ann/semantics', help='the folder for saving semantic masks')
     parser.add_argument('opts', help='see mseg_semantic/config/test/default_config_360.yaml for all options, model path should be passed in',
         default=None, nargs=argparse.REMAINDER)
     args = parser.parse_args()
+    config_path = os.path.join('configs', f'{args.config}.yaml')
+    args.config = config_path
+
+    # test on samples
+    if args.root_dir is None:
+        args.root_dir = f'{CODE_SPACE}/test_imgs'
+        args.cam_id='01'
+        args.img_file_type = 'png'
+
     assert args.config is not None
     cfg = config.load_cfg_from_cfg_file(args.config)
-    if args.opts is not None:
-        cfg = config.merge_cfg_from_list(cfg, args.opts)
-    cfg.img_dir = args.img_dir
+    cfg.root_dir = args.root_dir
+    cfg.cam_id = args.cam_id
+    cfg.img_folder = args.img_folder
+    cfg.img_file_type = args.img_file_type
+    cfg.gpus_num = args.gpus_num
+    cfg.save_folder = args.save_folder
     return cfg
+
 
   
 def get_prediction(embs, gt_embs_list):
