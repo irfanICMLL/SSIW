@@ -40,54 +40,33 @@ def normalize_img(  input: torch.Tensor,
 
             
 def pad_to_crop_sz(
-  	image: np.ndarray,
-	  crop_h: int,
-	  crop_w: int,
-	  mean: Tuple[float,float,float]
-	  ) -> Tuple[np.ndarray,int,int]:
-	  """
-	  Network input should be at least crop size, so we pad using mean values if
-	  provided image is too small. No rescaling is performed here.
-
-  	We use cv2.copyMakeBorder to copy the source image into the middle of a 
-  	destination image. The areas to the left, to the right, above and below the 
-  	copied source image will be filled with extrapolated pixels, in this case the 
-  	provided mean pixel intensity.
-
-		Args:
-		-	image:
-		-	crop_h: integer representing crop height
-		-	crop_w: integer representing crop width
-
-		Returns:
-		-	image: Numpy array of shape (crop_h x crop_w) representing a 
-				square image, with short side of square is at least crop size.
-		-	pad_h_half: half the number of pixels used as padding along height dim
-		-	pad_w_half" half the number of pixels used as padding along width dim
-  	"""
-  	ori_h, ori_w, _ = image.shape
-	  pad_h = max(crop_h - ori_h, 0)
-  	pad_w = max(crop_w - ori_w, 0)
-  	pad_h_half = int(pad_h / 2)
-  	pad_w_half = int(pad_w / 2)
-  	if pad_h > 0 or pad_w > 0:
-  		  image = cv2.copyMakeBorder(
-  			src=image,
-	   		top=pad_h_half,
-	  		bottom=pad_h - pad_h_half,
-  			left=pad_w_half,
-  			right=pad_w - pad_w_half,
-  			borderType=cv2.BORDER_CONSTANT,
-  			value=mean
-	 	)
+    image: np.ndarray,
+    crop_h: int,
+    crop_w: int,
+    mean: Tuple[float,float,float]
+    ) -> Tuple[np.ndarray,int,int]:
+    ori_h, ori_w, _ = image.shape
+    pad_h = max(crop_h - ori_h, 0)
+    pad_w = max(crop_w - ori_w, 0)
+    pad_h_half = int(pad_h / 2)
+    pad_w_half = int(pad_w / 2)
+    if pad_h > 0 or pad_w > 0:
+        image = cv2.copyMakeBorder(
+            src=image,
+            top=pad_h_half,
+            bottom=pad_h - pad_h_half,
+            left=pad_w_half,
+            right=pad_w - pad_w_half,
+            borderType=cv2.BORDER_CONSTANT,
+            value=mean)
     return image, pad_h_half, pad_w_half
 
 
 def resize_by_scaled_short_side(
-		image: np.ndarray,
-		base_size: int,
-		scale: float) -> np.ndarray:
-	""" Equivalent to ResizeShort(), but functional, instead of OOP paradigm, and w/ scale param.
+    image: np.ndarray,
+    base_size: int,
+    scale: float) -> np.ndarray:
+    """ Equivalent to ResizeShort(), but functional, instead of OOP paradigm, and w/ scale param.
 
 	Args:
 	    image: Numpy array of shape ()
@@ -95,15 +74,15 @@ def resize_by_scaled_short_side(
 
 	Returns:
 	    image_scaled:
-	"""
+    """
     h, w, _ = image.shape
-  	short_size = round(scale * base_size)
-  	new_h = short_size
-  	new_w = short_size
-  	# Preserve the aspect ratio
-  	if h > w:
-	  	new_h = round(short_size / float(w) * h)
-  	else:
-	  	new_w = round(short_size / float(h) * w)
-	  image_scaled = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-	  return image_scaled
+    short_size = round(scale * base_size)
+    new_h = short_size
+    new_w = short_size
+    # Preserve the aspect ratio
+    if h > w:
+        new_h = round(short_size / float(w) * h)
+    else:
+        new_w = round(short_size / float(h) * w)
+    image_scaled = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+    return image_scaled
