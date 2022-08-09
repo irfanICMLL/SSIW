@@ -44,7 +44,7 @@ def get_parser() -> CfgNode:
     TODO: add to library to avoid replication.
     """
     parser = argparse.ArgumentParser(description='PyTorch Semantic Segmentation')
-    parser.add_argument('--config', type=str, default='../config/test/siw_config_720_ss.yaml', help='config file')
+    parser.add_argument('--config', type=str, default='../config/test/test_720_ss.yaml', help='config file')
     parser.add_argument('--file_save', type=str, default='default', help='eval result to save, when lightweight option is on')
     parser.add_argument('--img_dir', type=str, default='../../test_any/all', help='dir for testing images')
     parser.add_argument('opts', help='see mseg_semantic/config/test/default_config_360.yaml for all options, model path should be passed in',
