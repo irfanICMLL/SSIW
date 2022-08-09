@@ -23,6 +23,7 @@ import glob
 from PIL import Image
 from utils.labels_dict import UNI_UID2UNAME, ALL_LABEL2ID, UNAME2EM_NAME
 import torch.multiprocessing as mp
+from utils.segformer import get_configured_segformer
 
 def get_logger():
     """
