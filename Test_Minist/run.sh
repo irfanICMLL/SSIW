@@ -1,9 +1,6 @@
 
-
-cd ..
-
 # single scale and single crop, it only forwards once per image.  The short edge of the image will be resized to 1080.
-python tools/test.py --config confgs/test_720_ss
+python tools/test.py --config test_720_ss
 
 # single scale and single crop, it only forwards once per image. The short edge of the image will be resized to 1080.
 #python tools/test.py --config confgs/test_1080_ss

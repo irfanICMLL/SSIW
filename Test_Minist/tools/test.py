@@ -13,7 +13,7 @@ import torch
 import torch.nn.functional as F
 import json
 
-from utils.config import config
+import utils.config as config
 from utils.config import CfgNode
 from utils.transforms_utils import get_imagenet_mean_std, normalize_img, pad_to_crop_sz, resize_by_scaled_short_side
 import matplotlib.pyplot as plt
@@ -272,7 +272,7 @@ if __name__ == '__main__':
     args = get_parser()
     logger.info(args)
     
-    dis_url = 'tcp://127.0.0.1:6769'
+    dist_url = 'tcp://127.0.0.1:6769'
     dist_url = dist_url[:-2] + str(os.getpid() % 100).zfill(2)
     args.dist_url = dist_url
     
