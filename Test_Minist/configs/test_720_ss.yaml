@@ -8,7 +8,7 @@ TEST:
   scales: [1.0]  
   
   test_gpu: [0, ]
-  model_path: 'models/segformer_7data.path'
+  model_path: 'models/segformer_7data.pth'
   emb_path: 'models/universal_cat2vec.npy'
 
   num_model_classes: 512

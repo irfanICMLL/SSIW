@@ -53,7 +53,7 @@ def get_parser() -> CfgNode:
     parser.add_argument('--img_file_type', default='jpeg', type=str, help='the file type of images, such as jpeg, png, jpg...')
 
     parser.add_argument('--config', type=str, default='720_ss', help='config file')
-    parser.add_argument('--gpus_num', type=int, default=2, help='number of gpus')
+    parser.add_argument('--gpus_num', type=int, default=1, help='number of gpus')
     parser.add_argument('--save_folder', type=str, default='ann/semantics', help='the folder for saving semantic masks')
     parser.add_argument('opts', help='see mseg_semantic/config/test/default_config_360.yaml for all options, model path should be passed in',
         default=None, nargs=argparse.REMAINDER)
@@ -202,7 +202,7 @@ def do_test(args, local_rank):
     ckpt_path = args.model_path
     checkpoint = torch.load(ckpt_path, map_location='cpu')['state_dict']
     ckpt_filter = {k: v for k, v in checkpoint.items() if 'criterion.0.criterion.weight' not in k}
-    model.load_state_dict(ckpt_filter, strict=True)
+    model.load_state_dict(ckpt_filter, strict=False)
 
     gt_embs_list = torch.tensor(np.load(args.emb_path)).cuda().float()
     id_to_label = UNI_UID2UNAME
