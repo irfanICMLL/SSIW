@@ -1,0 +1,31 @@
+TRAIN:
+  ignore_label: 255
+
+TEST:
+  base_size: 1080
+  test_h: 640
+  test_w: 640
+  scales: [1.0]  
+  
+  test_gpu: [0, ]
+  model_path: 'models/segformer_7data.path'
+  emb_path: 'models/universal_cat2vec.npy'
+
+  num_model_classes: 512
+  num_train_classes: 194
+  test_with_embeddings: False
+  logit_softmax_weight: 500
+  single_scale_single_crop: True
+  single_scale_multi_crop: False
+  multi_scale_multi_crop: False
+
+  emd_method: 'embeddings'
+  dataset_lib: dataset
+
+  distributed: False
+  
+  root_dir: ''
+  cam_id: 0
+  img_file_type: 'jpeg'
+  gpus_num: 1
+  save_folder: ''
