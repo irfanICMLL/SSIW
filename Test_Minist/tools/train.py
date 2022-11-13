@@ -14,7 +14,7 @@ from Test_Minist.utils.transforms_utils import get_imagenet_mean_std, normalize_
 
 class CMPFacade(Dataset):
 
-    def __init__(self, data_dir: str = "/home/amirhossein/PycharmProjects/SSIW/CMP_facade_DB_base/base",
+    def __init__(self, data_dir: str = "path_to_dataset/CMP_facade_DB_base/base",
                  transform: List = None, resize_base_size=512):
         if transform:
             self.transform = transforms.Compose(transform)
@@ -71,7 +71,7 @@ class CMPFacade(Dataset):
 
 
 
-def train(data_dir: str = '/home/amirhossein/PycharmProjects/SSIW/CMP_facade_DB_base/base'):
+def train(data_dir: str = 'path_to_dataset/CMP_facade_DB_base/base'):
     imgs_list = sorted(glob.glob(data_dir + "/*.jpg"))
     anots_list = sorted(glob.glob(data_dir + "/*.png"))
     for i, rgb_path in tqdm(enumerate(zip(imgs_list, anots_list))):
