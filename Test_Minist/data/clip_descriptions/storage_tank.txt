@@ -1,0 +1,1 @@
+An image of storage_tank. Storage tanks are containers that hold liquids.

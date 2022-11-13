@@ -3,7 +3,6 @@ import numpy as np
 import gensim
 import gensim.downloader
 
-
 UNI_UID2UNAME = {0: 'backpack', 1: 'umbrella', 2: 'bag', 3: 'tie', 4: 'suitcase', 5: 'case', 6: 'bird',
                  7: 'cat', 8: 'dog', 9: 'horse', 10: 'sheep', 11: 'cow', 12: 'elephant', 13: 'bear',
                  14: 'zebra', 15: 'giraffe', 16: 'animal_other', 17: 'microwave', 18: 'radiator', 19: 'oven',
@@ -24,7 +23,8 @@ UNI_UID2UNAME = {0: 'backpack', 1: 'umbrella', 2: 'bag', 3: 'tie', 4: 'suitcase'
                  100: 'sidewalk_pavement', 101: 'runway', 102: 'terrain', 103: 'book', 104: 'box', 105: 'clock',
                  106: 'vase', 107: 'scissors', 108: 'plaything_other', 109: 'teddy_bear', 110: 'hair_dryer',
                  111: 'toothbrush', 112: 'painting', 113: 'poster', 114: 'bulletin_board', 115: 'bottle', 116: 'cup',
-                 117: 'wine_glass', 118: 'knife', 119: 'fork', 120: 'spoon', 121: 'bowl', 122: 'tray', 123: 'range_hood',
+                 117: 'wine_glass', 118: 'knife', 119: 'fork', 120: 'spoon', 121: 'bowl', 122: 'tray',
+                 123: 'range_hood',
                  124: 'plate', 125: 'person', 126: 'rider_other', 127: 'bicyclist', 128: 'motorcyclist', 129: 'paper',
                  130: 'streetlight', 131: 'road_barrier', 132: 'mailbox', 133: 'cctv_camera', 134: 'junction_box',
                  135: 'traffic_sign', 136: 'traffic_light', 137: 'fire_hydrant', 138: 'parking_meter', 139: 'bench',
@@ -68,7 +68,8 @@ UNAME2EM_NAME = {'backpack': 'backpack', 'umbrella': 'umbrella', 'bag': 'bag', '
                  'sidewalk_pavement': 'sidewalk pavement', 'runway': 'runway', 'terrain': 'terrain',
                  'book': 'book', 'box': 'box', 'clock': 'clock', 'vase': 'vase', 'scissors': 'scissors',
                  'plaything_other': 'plaything other', 'teddy_bear': 'teddy bear', 'hair_dryer': 'hair dryer',
-                 'toothbrush': 'toothbrush', 'painting': 'painting', 'poster': 'poster', 'bulletin_board': 'bulletin board',
+                 'toothbrush': 'toothbrush', 'painting': 'painting', 'poster': 'poster',
+                 'bulletin_board': 'bulletin board',
                  'bottle': 'bottle', 'cup': 'cup', 'wine_glass': 'wine glass', 'knife': 'knife', 'fork': 'fork',
                  'spoon': 'spoon', 'bowl': 'bowl', 'tray': 'tray', 'range_hood': 'range hood', 'plate': 'plate',
                  'person': 'person', 'rider_other': 'rider', 'bicyclist': 'bicyclist', 'motorcyclist': 'motorcyclist',
@@ -77,19 +78,23 @@ UNAME2EM_NAME = {'backpack': 'backpack', 'umbrella': 'umbrella', 'bag': 'bag', '
                  'traffic_light': 'traffic light', 'fire_hydrant': 'fire hydrant', 'parking_meter': 'parking meter',
                  'bench': 'bench', 'bike_rack': 'bike rack', 'billboard': 'billboard', 'sky': 'sky', 'pole': 'pole',
                  'fence': 'fence', 'railing_banister': 'railing banister', 'guard_rail': 'guard rail',
-                 'mountain_hill': 'mountain hill', 'rock': 'rock', 'frisbee': 'frisbee', 'skis': 'skis', 'snowboard': 'snowboard',
-                 'sports_ball': 'sports ball', 'kite': 'kite', 'baseball_bat': 'baseball bat', 'baseball_glove': 'baseball glove',
+                 'mountain_hill': 'mountain hill', 'rock': 'rock', 'frisbee': 'frisbee', 'skis': 'skis',
+                 'snowboard': 'snowboard',
+                 'sports_ball': 'sports ball', 'kite': 'kite', 'baseball_bat': 'baseball bat',
+                 'baseball_glove': 'baseball glove',
                  'skateboard': 'skateboard', 'surfboard': 'surfboard', 'tennis_racket': 'tennis_racket', 'net': 'net',
-                 'base': 'base', 'sculpture': 'sculpture', 'column': 'column', 'fountain': 'fountain', 'awning': 'awning',
-                 'apparel': 'apparel', 'banner': 'banner', 'flag': 'flag', 'blanket': 'blanket', 'curtain_other': 'other curtain',
-                 'shower_curtain': 'shower curtain', 'pillow': 'pillow', 'towel': 'towel', 'rug_floormat': 'rug floormat',
+                 'base': 'base', 'sculpture': 'sculpture', 'column': 'column', 'fountain': 'fountain',
+                 'awning': 'awning',
+                 'apparel': 'apparel', 'banner': 'banner', 'flag': 'flag', 'blanket': 'blanket',
+                 'curtain_other': 'other curtain',
+                 'shower_curtain': 'shower curtain', 'pillow': 'pillow', 'towel': 'towel',
+                 'rug_floormat': 'rug floormat',
                  'vegetation': 'vegetation', 'bicycle': 'bicycle', 'car': 'car', 'autorickshaw': 'autorickshaw',
                  'motorcycle': 'motorcycle', 'airplane': 'airplane', 'bus': 'bus', 'train': 'train', 'truck': 'truck',
                  'trailer': 'trailer', 'boat_ship': 'boat ship', 'slow_wheeled_object': 'slow wheeled object',
                  'river_lake': 'river lake', 'sea': 'sea', 'water_other': 'water', 'swimming_pool': 'swimming pool',
                  'waterfall': 'waterfall', 'wall': 'wall', 'window': 'window', 'window_blind': 'window blind',
                  'unlabeled': 'unlabeled'}
-
 
 ALL_LABEL2ID = {'backpack': 0, 'umbrella': 1, 'bag': 2, 'tie': 3, 'suitcase': 4, 'case': 5, 'bird': 6, 'cat': 7,
                 'dog': 8, 'horse': 9, 'sheep': 10, 'cow': 11, 'elephant': 12, 'bear': 13, 'zebra': 14,
@@ -141,3 +146,22 @@ ALL_LABEL2ID = {'backpack': 0, 'umbrella': 1, 'bag': 2, 'tie': 3, 'suitcase': 4,
                 'alpaca(which is a type of animal)': 230, 'teapot': 231, 'glove': 232,
                 'sea lion(which is a type of animal)': 233, 'printer': 234, 'balloon': 235, 'stapler': 236,
                 'calculator': 237, 'unlabeled': 255}
+
+UNI_UID2UNAME
+
+UNI_UID2UNAME_Facade = {0: 'background', 1: 'facade', 9: 'window', 4: 'door', 10: 'cornice', 2: 'sill', 3: 'balcony',
+                        5: 'blind', 7: 'deco', 6: 'molding', 11: 'pillar', 8: 'shop'}
+Background_Def = {
+    'facade': 'bounding box for a single plane wall, from pavement to roof, only complete facades are labeled, as if there is no occlusion by cars or others.',
+    'window': 'entire glass area including borders, subtypes according to subdivision of window panes; all visible windows are annotated even if not within Facade.',
+    'blind': 'any functional obstacle to light on the window, both open or closed.',
+    'cornice': 'decorative (raised) panel above the window.',
+    'sill': 'decorative (raised) panel or stripe under the window.',
+    'door': 'entrance.',
+    'balcony': 'including railing, overlap with window when glass is visible behind.',
+    'deco': 'any bigger piece of original art, paintings, reliefs, statues, when no other class is applicable.',
+    'molding': 'horizontal decorative stripe across the facade, possibly with a repetitive texture pattern.',
+    'pillar': 'vertical decorative stripe across the facade, possibly with a repetitive texture pattern, terminators (cap, base) are labeled separately.',
+    'shop': 'shop windows, commercials, signs.',
+    'background': 'The unexplained part of the image is considered a Background.'
+}

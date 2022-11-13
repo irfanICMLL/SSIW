@@ -48,7 +48,7 @@ class SegFormerHead(BaseDecodeHead):
             in_channels=embedding_dim*4,
             out_channels=embedding_dim,
             kernel_size=1,
-            norm_cfg=dict(type='SyncBN', requires_grad=True)
+            norm_cfg=dict(type='BN', requires_grad=True)
         )
 
         self.linear_pred = nn.Conv2d(embedding_dim, self.num_classes, kernel_size=1)
