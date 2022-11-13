@@ -15,7 +15,7 @@ import torch
 import torch.distributed as dist
 import torch.nn.functional as F
 from PIL import Image
-from segmentation_models_pytorch.losses import JaccardLoss,DiceLoss,SoftCrossEntropyLoss,FocalLoss
+from segmentation_models_pytorch.losses import JaccardLoss, DiceLoss, SoftCrossEntropyLoss, FocalLoss
 from tqdm import tqdm
 import torchvision.transforms as transforms
 import Test_Minist.utils.config as config
@@ -368,7 +368,7 @@ class Dataset:
 
 class CMPFacade(Dataset):
 
-    def __init__(self, data_dir: str = "/home/amirhossein/PycharmProjects/SSIW/CMP_facade_DB_base/base",
+    def __init__(self, data_dir: str = "path_to_dataset/CMP_facade_DB_base/base",
                  transform: List = None, resize_base_size=512, transforms=None):
         if transform:
             self.transform = transforms.Compose(transform)
@@ -429,7 +429,7 @@ def anot_preproces(anot_cv: np.ndarray) -> np.ndarray:
     convert each mask of shape [H,W,C=3]->[H,W,C=N]
     N: is number of categories
     '''
-    data_dir = '/home/amirhossein/PycharmProjects/SSIW/CMP_facade_DB_base/base'
+    data_dir = 'path_to_dataset/CMP_facade_DB_base/base'
     color_dict = Image.open(sorted(glob.glob(data_dir + "/*.png"))[0]).palette.colors
     output_mask = []
     for label in color_dict.keys():
@@ -444,7 +444,10 @@ def anot_preproces(anot_cv: np.ndarray) -> np.ndarray:
     return np.transpose(output_mask, (2, 0, 1))
 
 
-def train(data_dir: Union[str, Path] = '/home/amirhossein/PycharmProjects/SSIW/CMP_facade_DB_base/base'):
+def train(data_dir: Union[str, Path] = 'path_to_dataset/CMP_facade_DB_base/base'):
+    '''Note: data_dir must contain both images and its corresponding mask
+    and the partition that I considered for train test split (50) is according to cmp Facade dataset
+    '''
     imgs_train_list = sorted(glob.glob(data_dir + "/*.jpg"))[50:]
     anots_train_list = sorted(glob.glob(data_dir + "/*.png"))[50:]
     imgs_test_list = sorted(glob.glob(data_dir + "/*.jpg"))[:50]
@@ -455,14 +458,14 @@ def train(data_dir: Union[str, Path] = '/home/amirhossein/PycharmProjects/SSIW/C
                                      criterion=None,
                                      load_imagenet_model=False)
     model = torch.nn.DataParallel(model)
-    ckpt_path = '/home/amirhossein/PycharmProjects/SSIW/Test_Minist/model/segformer_7data.pth'
+    ckpt_path = 'path_to_model/model/segformer_7data.pth'
     checkpoint = torch.load(ckpt_path, map_location='cpu')['state_dict']
     ckpt_filter = {k: v for k, v in checkpoint.items() if 'criterion.0.criterion.weight' not in k}
     model.load_state_dict(ckpt_filter, strict=False)
 
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-4)
-    #I used two loss function for evaluation
+    # I used two loss function for evaluation
     criterion = JaccardLoss(mode='multilabel', from_logits=False)
     # criterion = DiceLoss(mode='multilabel', from_logits=False)
     EPOCH = 5
